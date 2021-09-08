@@ -40,7 +40,10 @@
 
 ### 3.3 数据通路图
 
-![参考数据通路](pic/lab0-datapath.png)
+<p align="center">
+  <img src="pic/lab0-datapath.png" alt="参考数据通路"/>
+</p>
+
 
 具体的设计要点参见计算机系统Ⅰ实验10的实验指导书。
 
@@ -50,6 +53,8 @@
 
 <a name="Table-1"></a>
 
+<center>
+
 | **信号线** | **含义** | **1'b0** | **1'b1** |
 | :---------: | :------------------: | :---------------: | :----------------: |
 | reg\_write  | 写寄存器            | 不写回           | 写回            |
@@ -58,16 +63,22 @@
 | branch      | 是否为branch指令    | 不是             | 是             |
 | b\_type     | branch指令的具体类型 | bne             | beq           |
 
-<center>表1：1位信号线的含义</center>
+</center>
+
+<p style="text-align: center;">表1：1位信号线的含义</p>
 
 <a name="Table-2"></a>
 
+<center>
+
 | **信号线** | **含义** | **2'b00** | **2'b01** | **2'b10** | **2'b11** |
 | :----------: | :---------------------: | :------------------: | :----------: | :---------: | :---------: |
-| pc\_src      | pc的数据来源            | pc+4，branch跳转地址 | jalr跳转地址 | jal跳转地址 | 闲置        |
-| mem\_to\_reg | 写回Registers的数据来源 | alu                  | imm          | pc+4        | data memory |
+| pc\_src      | pc的数据来源           | pc+4，branch跳转地址 | jalr跳转地址 | jal跳转地址 | 闲置        |
+| mem\_to\_reg | 写回Registers的数据来源 | alu                | imm        | pc+4       | data memory |
 
-<center>表2: 2位信号线的含义</center>
+</center>
+
+<p style="text-align: center;">表2：2位信号线的含义</p>
 
 <a name="Chapter-3.5"></a>
 
