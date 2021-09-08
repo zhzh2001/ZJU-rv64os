@@ -1,6 +1,6 @@
 # 浙江大学21年秋系统贯通二实验
 
-本[仓库](https://gitee.com/zjusec/sys2lab-21fall-stu)是浙江大学21年秋**系统贯通二**课程的教学仓库，包含在操作系统课程上所有的实验文档和公开代码。仓库目录结构：
+本[仓库](https://gitee.com/zjusec/sys2lab-21fall-stu)是浙江大学21年秋**系统贯通二**课程的教学仓库，包含所有实验文档和公开代码。仓库目录结构：
 
 ```bash
 ├── README.md
