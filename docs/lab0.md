@@ -41,7 +41,7 @@
 ### 3.3 数据通路图
 
 <p align="center">
-  <img src="pic/lab0-datapath.png" alt="参考数据通路"/>
+  <img src="./pic/lab0-datapath.png" alt="参考数据通路"/>
 </p>
 
 
