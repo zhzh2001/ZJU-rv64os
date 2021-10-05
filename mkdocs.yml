@@ -1,7 +1,12 @@
 site_name: 浙江大学21年秋系统贯通二实验 
 site_url: https://zjusec.gitee.io/sys2lab-21fall/
+repo_url: https://gitee.com/zjusec/sys2lab-21fall
+repo_name: zjusec/sys2lab-21fall
 theme:
   name: material
+  features:
+    - navigation.expand
+    - navigation.top
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
@@ -15,9 +20,18 @@ theme:
         name: Switch to light mode
 nav:
   - 实验指导零: lab0.md
+  - 实验指导一:
+    - 第一部分: lab1-1.md
+    - 第二部分: lab1-2.md
+  - 作业一: hw1.md
   - 常见问题及解答: faq.md
 markdown_extensions:
-  - pymdownx.highlight
+  - attr_list
+  - pymdownx.tasklist:
+      custom_checkbox: true
+      clickable_checkbox: true
+  - pymdownx.highlight:
+      linenums: true
   - pymdownx.superfences
   - pymdownx.emoji:
       emoji_index: !!python/name:materialx.emoji.twemoji
