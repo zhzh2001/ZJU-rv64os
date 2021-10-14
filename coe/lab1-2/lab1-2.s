@@ -9,6 +9,9 @@ test1:
     nop
     nop
     srl x6, x4, x3      # 0x6F56D877
+    nop
+    nop
+    nop
     and x7, x5, x6      # 0x21525067
     lui x8, 0x21525     # 0x21525000
     nop
@@ -27,20 +30,17 @@ test1:
 
 test2:
     sw x4, 0(x0)        # mem[0] = 0xDEADB0EF
-    lb x1, 1(x0)        # 0xFFFFFFB0
-    lbu x2, 2(x0)       # 0x000000AD
-    sb x3, 3(x0)        # mem[0] = 0x01ADB0EF
-    lw x4, 0(x0)        # 0x01ADB0EF
-    lui x5, 0x1ADB      # 0x01ADB000
-    srli x6, x4, 12     # 0x00001ADB
+    lw x5, 0(x0)        # 0xDEADB0EF
+    lui x6, 0x1ADB      # 0x01ADB000
+    srli x7, x4, 12     # 0x000DEADB
+    nop
+    nop
+    addi x8, x5, -0xEF  # 0xDEADB000
+    slli x7, x7, 12     # 0xDEADB000
     nop
     nop
     nop
-    slli x7, x6, 12     # 0xADADB000
-    nop
-    nop
-    nop
-    bne x5, x7, fail
+    bne x8, x7, fail
     nop
     nop
     nop

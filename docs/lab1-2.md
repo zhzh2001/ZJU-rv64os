@@ -20,7 +20,7 @@
 - [ ] lui
 - [ ] jal, jalr
 - [ ] beq, bne
-- [ ] lw, lb, lbu, sw, sb
+- [ ] lw, sw
 - [ ] addi, slti, xori, ori, andi, srli, srai
 - [ ] add, sub, sll, slt, sra, or, xor, and
 
