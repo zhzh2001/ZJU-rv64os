@@ -25,7 +25,9 @@ nav:
     - 第二部分: lab1-2.md
   - 实验指导二:
     - 第一部分: lab2-1.md
+    - 第二部分: lab2-2.md
   - 作业一: hw1.md
+  - 作业二: hw2.md
   - 常见问题及解答: faq.md
 markdown_extensions:
   - attr_list
