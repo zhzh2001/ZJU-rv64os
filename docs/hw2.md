@@ -8,7 +8,7 @@ This exercise is intended to help you understand the cost/complexity/performance
 
 These problems assume that, of all the instructions executed in a processor, the following fraction of these instructions has a particular type of RAW data dependence.
 
-| EX to $1^{st}$ only | MEM to $1^{st}$ only | EX to $2^{nd}$ only | MEM to $2^{nd}$ only | EX to $1^{st}$ and EX to $2^{nd}$ |
+| EX to 1st only | MEM to 1st only | EX to 2nd only | MEM to 2nd only | EX to 1st and EX to 2nd |
 | :-----------------: | :------------------: | :-----------------: | :------------------: | :-------------------------------: |
 |         5%          |         20%          |         5%          |         10%          |                10%                |
 
