@@ -20,9 +20,12 @@ We assume that the register write is done in the first half of the clock cycle a
 
 Assume the following latencies for individual pipeline stages. For the EX stage, latencies are given separately for a processor without forwarding and for a processor with different kinds of forwarding.
 
-1. For each type RAW dependency above, how many nop instructions would need to be inserted to allow your code run correctly on a pipeline with no forwarding or hazard detection?
+|  IF   |  ID   | EX(no FW) | EX(full FW) | EX(FW from EX/MEM only) | EX(FW from MEM/WB only) |  MEM  |  WB   |
+| :---: | :---: | :-------: | :---------: | :---------------------: | :---------------------: | :---: | :---: |
+| 120ps | 100ps |   110ps   |    130ps    |          120ps          |          120ps          | 120ps | 100ps |
 
-2. Analyzing each dependency type independently will over-count the number of nop instructions needed to run a program on a pipeline with no forwarding or hazard detection. In the code below, how many nop instructions are over-counted by analyzing dependency type independently?
+
+Here is code for question 2:
 
 ```
 ld  x11, 0(x5)
@@ -30,6 +33,10 @@ add x12, x6, x7
 add x13, x11, x12
 add x28, x29, x30
 ```
+
+1. For each type RAW dependency above, how many nop instructions would need to be inserted to allow your code run correctly on a pipeline with no forwarding or hazard detection?
+
+2. Analyzing each dependency type independently will over-count the number of nop instructions needed to run a program on a pipeline with no forwarding or hazard detection. In the code above, how many nop instructions are over-counted by analyzing dependency type independently?
 
 3. Assuming no other hazards, what is the CPI for the program described by the table above when run on a pipeline with no forwarding? What percent of cycles are stalls? (For simplicity, assume that all necessary cases are listed above and can be treated independently.)
 
