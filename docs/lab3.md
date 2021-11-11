@@ -169,7 +169,7 @@ $ docker exec -it oslab bash
 # 把用户的 home 目录映射到 docker 镜像内的 have-fun-debugging 目录
 $ docker run --name oslab -it -v ${HOME}:/have-fun-debugging oslab:2021 bash    # -v 本地目录:容器内目录
 ```
-sys2lab-21fall
+
 ### 4.2 获取 Linux 源码和已经编译好的文件系统
 
 从 [https://www.kernel.org](https://www.kernel.org) 下载最新的 Linux 源码。
