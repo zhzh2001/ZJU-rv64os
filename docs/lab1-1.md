@@ -67,7 +67,7 @@
 
 **请注意**，我们会保证本次实验的测试程序不存在加法指令的数据竞争，同学们无需考虑竞争相关的设计问题。
 
-本次实验的测试文件位于[gitee](https://gitee.com/zjusec/sys2lab-21fall/tree/master/coe/lab1-1)。
+本次实验的测试文件位于[gitee](https://gitee.com/zjusec/sys2lab-21fall/tree/master/src/lab1-1)。
 
 ### 4.2 实验步骤
 
