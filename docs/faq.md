@@ -34,4 +34,4 @@ Breakpoint 1, 0x000000008000babe in _never_gonna_give_you_up ()
 
 ## 5. mtime & mtimecmp
 
-在QEMU中也可以方便地查看`mtime`和`mtimecmp`的值，`mtime`和`mtimecmp`的实现是通过MMIO(Memory-mapped I/O)的方式实现的，在QEMU的默认设置中mtime的地址位于0x200bff8，读这个地址的值就是mtime的值(我们的实验中是一个64bit的量)，mtimecmp的地址在0x2004000。
+在QEMU中也可以方便地查看`mtime`和`mtimecmp`的值，`mtime`和`mtimecmp`的实现是通过MMIO(Memory-mapped I/O)的方式实现的，在QEMU的默认设置中`mtime`的地址位于`0x200bff8`，读这个地址的值就是`mtime`的值(实验中是一个64bit的量)，`mtimecmp`的地址在`0x2004000`。
