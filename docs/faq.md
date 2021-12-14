@@ -27,3 +27,11 @@ Breakpoint 1, 0x000000008000babe in _never_gonna_give_you_up ()
 ```
 
 这样就可以看到断点被触发，可以继续调试了。
+
+## 4. Function Prologue and Epilogue in C
+
+在实验中C语言编译出的函数会多出一部分非程序的代码，集中在函数的开头与结尾，这被称作`Prologue`和`Epilogue`，他们起到了分配栈空间等作用，具体的信息可以查看这个[回答](https://stackoverflow.com/questions/14765406/function-prologue-and-epilogue-in-c)。
+
+## 5. mtime & mtimecmp
+
+在QEMU中也可以方便地查看`mtime`和`mtimecmp`的值，`mtime`和`mtimecmp`的实现是通过MMIO(Memory-mapped I/O)的方式实现的，在QEMU的默认设置中mtime的地址位于0x200bff8，读这个地址的值就是mtime的值(我们的实验中是一个64bit的量)，mtimecmp的地址在0x2004000。
