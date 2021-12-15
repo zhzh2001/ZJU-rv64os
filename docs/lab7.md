@@ -98,18 +98,6 @@ illegal instruction：当读取到非法指令时，触发该异常，跳转至m
 
 
 
-基本要求
+基本要求：实现M特权态，增加指令`ecall, mret, csr/[s/w/c/]`，增加CSR寄存器`mtvec, mepc, mstatus`，实现异常机制
 
-- 特权态：M mode
-- 指令：ecall, mret, csr_
-- 寄存器：mtvec, mepc, mstatus
-- 中断/异常：ecall
-
-
-高阶要求
-
-- 特权态：M mode
-- 指令：ecall, mret, csr_
-- 寄存器：mtvec, mepc, mstatus, **mcause**
-- 中断/异常：ecall, **illegal instruction**
-
+高阶要求：编译运行ADVANCE kernel，增加CSR寄存器`mcause`，增加`illegal instruction`异常
