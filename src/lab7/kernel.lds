@@ -26,7 +26,7 @@ SECTIONS
 		. = ALIGN(8);
 		PROVIDE(bss_end = .);
 	}
-	. = ALIGN(0x1000);
+	. = ALIGN(0x500);
 	stack_top = .;
 	_end = .;
 }
