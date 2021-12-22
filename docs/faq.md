@@ -41,4 +41,4 @@ Breakpoint 1, 0x000000008000babe in _never_gonna_give_you_up ()
 * 设置sp寄存器是为了给C语言提供运行环境，需要在执行任何C语言编写的函数前准备好栈
 * C语言默认的整数常数类型为整形，如果需要使用长整形使用`1L << 63`
 * gdb卡住时可以通过`ctrl+C`查看程序当前运行状态，遇到非预期的异常时可以通过`scause, sepc`的值进行跟踪和调试，注意并不是所有地址都是可供读写的，请尽量确保读写的地址落在栈空间和给每个进程分配的空间上
-* 在Makefile的编译选项`CFLAG`中加入`-g`选项可以在调试时通过`layout src`查看源码，但是在过程中可能会出现部分变量显示为`<error reading variable: dwarf2_find_location_expression: Corrupted DWARF expression.>`的情况，这是`gcc`的一个bug，在新版本已经修复，但是在本学期的实验环境中暂时无法解决
+* 在Makefile的编译选项`CFLAG`中加入`-g`选项可以在调试时通过`layout src`查看源码，但是在过程中可能会出现部分变量显示为`<error reading variable: dwarf2_find_location_expression: Corrupted DWARF expression.>`的情况，这是`gcc`的一个bug，在新版本已经修复，在本次实验中可以通过关闭`-O3`优化选项来解决
