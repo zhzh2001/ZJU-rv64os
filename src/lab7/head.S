@@ -15,7 +15,7 @@
 .global _start
 _start:
     # set mstatus register
-    li      a0, MSTATUS_INIT    # MPP = 01, MPIE = 1, SPIE = 1
+    li      a0, MSTATUS_INIT    # MPP = 11
     csrw    mstatus, a0
 
     # set machine trap vector
