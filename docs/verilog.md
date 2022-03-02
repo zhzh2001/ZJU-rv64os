@@ -2,11 +2,11 @@
 
 ## 资源
 
-* [Verilog Standard: IEEE 1364 - 2005](https://www.eg.bucknell.edu/~csci320/2016-fall/wp-content/uploads/2015/08/verilog-std-1364-2005.pdf)
-  * Verilog 语言标准，当你想学习 Verilog 语言技巧，对语言本身产生困惑时可以看。比如它能解答这些疑问：
-    * 用小于号比较两个 `reg` 到底是有符号比较还是无符号比较？
-    * 如何使用 hierarchical names 来方便流水线 CPU 的开发？
-    * 如何使用 `generate` 来避免大量重复的代码？
+* [Verilog Standard: IEEE 1364 - 2005](https://ieeexplore.ieee.org/document/1620780)
+    * Verilog 语言标准，当你想学习 Verilog 语言技巧，对语言本身产生困惑时可以看。比如它能解答这些疑问：
+        * 用小于号比较两个 `reg` 到底是有符号比较还是无符号比较？
+        * 如何使用 hierarchical names 来方便流水线 CPU 的开发？
+        * 如何使用 `generate` 来避免大量重复的代码？
 
 
 
