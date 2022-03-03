@@ -32,7 +32,6 @@ nav:
   - 实验指导六: lab6.md
   - 实验指导七: lab7.md
   - 常见问题及解答: faq.md
-  - Verilog Tips: verilog.md
 markdown_extensions:
   - attr_list
   - pymdownx.tasklist:

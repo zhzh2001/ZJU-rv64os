@@ -47,7 +47,7 @@ Naive Kernel 不使用串口或其他协议与外界通信，而是使用 gp 寄
 Naive Kernel 不需要使用 OpenSBI 作为 Bootloader，因此在 QEMU 选项中使用 `-bios` 而非 `-kernel` 来加载 ELF 文件。因此为了调试 Naive Kernel，使用如下命令：
 
 ```bash
-$ qemu-system-riscv64 -nographic -machine virt -bios path/to/sim.elf -S -s
+$ qemu-system-riscv32 -nographic -machine virt -bios path/to/sim.elf -S -s
 ```
 
 其他流程均与之前的实验相似。
