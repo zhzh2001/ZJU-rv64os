@@ -3,3 +3,4 @@
 site/
 .idea/
 .gdbinit
+.gdb_history

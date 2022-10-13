@@ -1,11 +1,10 @@
 #include "types.h"
 #include "sbi.h"
 
-
 struct sbiret sbi_ecall(int ext, int fid, uint64 arg0,
-			            uint64 arg1, uint64 arg2,
-			            uint64 arg3, uint64 arg4,
-			            uint64 arg5) 
+						uint64 arg1, uint64 arg2,
+						uint64 arg3, uint64 arg4,
+						uint64 arg5)
 {
 	struct sbiret ret;
 
@@ -36,4 +35,9 @@ void sbi_putchar(unsigned c)
 void sbi_shutdown()
 {
 	sbi_ecall(SBI_SHUTDOWN, 0, 0, 0, 0, 0, 0, 0);
+}
+
+void sbi_set_timer(uint64 stime_value)
+{
+	sbi_ecall(SBI_SET_TIMER, 0, stime_value, 0, 0, 0, 0, 0);
 }
