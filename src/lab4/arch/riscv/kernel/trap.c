@@ -1,6 +1,7 @@
 #include "trap.h"
 #include "printk.h"
 #include "clock.h"
+#include "proc.h"
 
 void trap_handler(uint64 scause, uint64 sepc)
 {
@@ -9,8 +10,9 @@ void trap_handler(uint64 scause, uint64 sepc)
 		// is interrupt
 		if ((scause & ~TRAP_MASK) == TIMER_IRQ)
 		{
-			printk("Timer interrupt: %ld\n", get_cycles());
+			// printk("Timer interrupt: %ld\n", get_cycles());
 			clock_set_next_event();
+			do_timer();
 		}
 		else
 		{

@@ -6,6 +6,12 @@ _start:
     # setup stack
     la sp, boot_stack_top
 
+    # setup memory management
+    call mm_init
+
+    # init tasks
+    call task_init
+
     # setup trap vector
     la t0, _traps
     csrw stvec, t0
