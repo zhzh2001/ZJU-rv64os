@@ -62,7 +62,7 @@ void dummy()
 	}
 }
 
-extern void __switch_to(struct task_struct *prev, struct task_struct *next);
+extern void __switch_to(struct thread_struct *prev, struct thread_struct *next);
 
 void switch_to(struct task_struct *next)
 {
@@ -75,7 +75,7 @@ void switch_to(struct task_struct *next)
 #endif
 		struct task_struct *prev = current;
 		current = next;
-		__switch_to(prev, next);
+		__switch_to(&prev->thread, &next->thread);
 	}
 }
 
