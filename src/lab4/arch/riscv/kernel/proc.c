@@ -46,18 +46,23 @@ void task_init()
 	printk("...proc_init done!\n");
 }
 
+extern char _stext[], _srodata[];
+
 void dummy()
 {
 	uint64 MOD = 1000000007;
 	uint64 auto_inc_local_var = 0;
 	int last_counter = -1;
+	// _stext[0] = 0;
+	// _srodata[0] = 0;
+	// ((void (*)())(_srodata))();
 	while (1)
 	{
 		if (last_counter == -1 || current->counter != last_counter)
 		{
 			last_counter = current->counter;
 			auto_inc_local_var = (auto_inc_local_var + 1) % MOD;
-			printk("[PID = %d] is running. auto_inc_local_var = %d\n", current->pid, auto_inc_local_var);
+			printk("[PID = %ld] is running. thread space begin at 0x%lx\n", current->pid, current);
 		}
 	}
 }
@@ -71,7 +76,7 @@ void switch_to(struct task_struct *next)
 #ifdef SJF
 		printk("\nswitch to [PID = %d COUNTER = %d]\n", next->pid, next->counter);
 #else
-		printk("\nswitch to [PID = %d PRIORITY = %d COUNTER = %d]\n", next->pid, next->priority, next->counter);
+		printk("\nswitch to [PID = %ld PRIORITY = %ld COUNTER = %ld]\n", next->pid, next->priority, next->counter);
 #endif
 		struct task_struct *prev = current;
 		current = next;
@@ -111,7 +116,7 @@ void schedule()
 		for (int i = 1; i < NR_TASKS; i++)
 		{
 			task[i]->counter = rand();
-			printk("SET [PID = %d COUNTER = %d]\n", task[i]->pid, task[i]->counter);
+			printk("SET [PID = %ld COUNTER = %ld]\n", task[i]->pid, task[i]->counter);
 		}
 		schedule();
 	}
@@ -135,7 +140,7 @@ void schedule()
 		for (int i = 1; i < NR_TASKS; i++)
 		{
 			task[i]->counter = task[i]->priority;
-			printk("SET [PID = %d PRIORITY = %d COUNTER = %d]\n", task[i]->pid, task[i]->priority, task[i]->counter);
+			printk("SET [PID = %ld PRIORITY = %ld COUNTER = %ld]\n", task[i]->pid, task[i]->priority, task[i]->counter);
 		}
 		schedule();
 	}
