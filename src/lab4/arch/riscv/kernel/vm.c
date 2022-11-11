@@ -17,7 +17,7 @@ void setup_vm(void)
 	*/
 	memset(early_pgtbl, 0, sizeof(early_pgtbl));
 	// map va 0x80000000 to pa 0x80000000
-	early_pgtbl[VPN2(PHY_START)] = MKPTE(PHY_START, 0xf);
+	// early_pgtbl[VPN2(PHY_START)] = MKPTE(PHY_START, 0xf);
 	// map va 0xffffffe000000000 to pa 0x80000000
 	early_pgtbl[VPN2(VM_START)] = MKPTE(PHY_START, 0xf);
 }

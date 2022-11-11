@@ -49,6 +49,11 @@ relocate:
     add ra, ra, t0
     add sp, sp, t0
 
+    # set stvec to virtual address
+    la t1, return
+    add t1, t1, t0
+    csrw stvec, t1
+
     # set satp with early_pgtbl
 
     la t0, early_pgtbl
@@ -60,6 +65,7 @@ relocate:
     # flush tlb
     sfence.vma zero, zero
 
+return:
     ret
 
     .section .bss.stack
