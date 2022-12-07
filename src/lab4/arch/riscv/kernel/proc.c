@@ -4,6 +4,8 @@
 #include "defs.h"
 #include "printk.h"
 #include "panic.h"
+#include "vm.h"
+#include "string.h"
 
 extern void __dummy();
 
@@ -32,6 +34,12 @@ void task_init()
 	// 3. 为 task[1] ~ task[NR_TASKS - 1] 设置 `thread_struct` 中的 `ra` 和 `sp`,
 	// 4. 其中 `ra` 设置为 __dummy （见 4.3.2）的地址， `sp` 设置为 该线程申请的物理页的高地址
 
+	extern char uapp_start[], uapp_end[];
+	uint64 uapp_pgs = PGROUNDUP(uapp_end - uapp_start) / PGSIZE;
+	extern unsigned long swapper_pg_dir[512];
+
+	uint64 sstatus = csr_read(sstatus);
+
 	for (int i = 1; i < NR_TASKS; i++)
 	{
 		task[i] = (struct task_struct *)kalloc();
@@ -41,6 +49,22 @@ void task_init()
 		task[i]->pid = i;
 		task[i]->thread.ra = (uint64)__dummy;
 		task[i]->thread.sp = (uint64)task[i] + PGSIZE;
+
+		// create U-mode page table
+		pagetable_t uapp_pgd = (pagetable_t)kalloc();
+		memcpy(uapp_pgd, swapper_pg_dir, PGSIZE);
+		uint64 uapp_pa = (uint64)alloc_pages(uapp_pgs);
+		memcpy((void *)uapp_pa, uapp_start, uapp_end - uapp_start);
+		memset((void *)(uapp_pa + uapp_end - uapp_start), 0, uapp_pgs * PGSIZE - (uapp_end - uapp_start));
+		create_mapping(uapp_pgd, USER_START, uapp_pa - PA2VA_OFFSET, uapp_pgs, PTE_U | PTE_X | PTE_W | PTE_R | PTE_V);
+		uint64 uapp_stack = (uint64)alloc_pages(1);
+		create_mapping(uapp_pgd, USER_END - PGSIZE, uapp_stack - PA2VA_OFFSET, 1, PTE_U | PTE_W | PTE_R | PTE_V);
+
+		// set U-mode trapframe
+		task[i]->thread.sepc = USER_START;
+		task[i]->thread.sstatus = (sstatus & ~STATUS_SPP) | STATUS_SPIE | STATUS_SUM;
+		task[i]->thread.sscratch = USER_END; // user stack pointer
+		task[i]->thread.pgd = (pagetable_t)((((uint64)uapp_pgd - PA2VA_OFFSET) >> 12) | 0x8000000000000000);
 	}
 
 	printk("...proc_init done!\n");
@@ -74,9 +98,9 @@ void switch_to(struct task_struct *next)
 	if (next->pid != current->pid)
 	{
 #ifdef SJF
-		printk("\nswitch to [PID = %d COUNTER = %d]\n", next->pid, next->counter);
+		printk("\n[S-MODE] switch to [PID = %d COUNTER = %d]\n", next->pid, next->counter);
 #else
-		printk("\nswitch to [PID = %ld PRIORITY = %ld COUNTER = %ld]\n", next->pid, next->priority, next->counter);
+		printk("\n[S-MODE] switch to [PID = %ld PRIORITY = %ld COUNTER = %ld]\n", next->pid, next->priority, next->counter);
 #endif
 		struct task_struct *prev = current;
 		current = next;
@@ -116,7 +140,7 @@ void schedule()
 		for (int i = 1; i < NR_TASKS; i++)
 		{
 			task[i]->counter = rand();
-			printk("SET [PID = %ld COUNTER = %ld]\n", task[i]->pid, task[i]->counter);
+			printk("[S-MODE] SET [PID = %ld COUNTER = %ld]\n", task[i]->pid, task[i]->counter);
 		}
 		schedule();
 	}
@@ -140,7 +164,7 @@ void schedule()
 		for (int i = 1; i < NR_TASKS; i++)
 		{
 			task[i]->counter = task[i]->priority;
-			printk("SET [PID = %ld PRIORITY = %ld COUNTER = %ld]\n", task[i]->pid, task[i]->priority, task[i]->counter);
+			printk("[S-MODE] SET [PID = %ld PRIORITY = %ld COUNTER = %ld]\n", task[i]->pid, task[i]->priority, task[i]->counter);
 		}
 		schedule();
 	}

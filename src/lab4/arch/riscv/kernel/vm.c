@@ -34,13 +34,16 @@ void setup_vm_final(void)
 	// No OpenSBI mapping required
 
 	// mapping kernel text X|-|R|V
-	create_mapping(swapper_pg_dir, (uint64)_stext, (uint64)_stext - PA2VA_OFFSET, (uint64)_srodata - (uint64)_stext, 0xb);
+	create_mapping(swapper_pg_dir, (uint64)_stext, (uint64)_stext - PA2VA_OFFSET,
+				   (uint64)_srodata - (uint64)_stext, PTE_X | PTE_R | PTE_V);
 
 	// mapping kernel rodata -|-|R|V
-	create_mapping(swapper_pg_dir, (uint64)_srodata, (uint64)_srodata - PA2VA_OFFSET, (uint64)_sdata - (uint64)_srodata, 0x3);
+	create_mapping(swapper_pg_dir, (uint64)_srodata, (uint64)_srodata - PA2VA_OFFSET,
+				   (uint64)_sdata - (uint64)_srodata, PTE_R | PTE_V);
 
 	// mapping other memory -|W|R|V
-	create_mapping(swapper_pg_dir, (uint64)_sdata, (uint64)_sdata - PA2VA_OFFSET, PHY_SIZE - ((uint64)_sdata - VM_START), 0x7);
+	create_mapping(swapper_pg_dir, (uint64)_sdata, (uint64)_sdata - PA2VA_OFFSET,
+				   PHY_SIZE - ((uint64)_sdata - VM_START), PTE_W | PTE_R | PTE_V);
 
 	// set satp with swapper_pg_dir
 	csr_write(satp, (((uint64)swapper_pg_dir - PA2VA_OFFSET) >> 12) | 0x8000000000000000);

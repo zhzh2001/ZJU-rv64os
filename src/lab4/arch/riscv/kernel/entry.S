@@ -2,6 +2,11 @@
     .align 2
     .globl _traps 
 _traps:
+	# swap stack
+	mv t0, sp
+	csrr sp, sscratch
+	csrw sscratch, t0
+
 	# save 31 registers and sepc to stack
 	addi sp, sp, -32*8
 	sd x1, 0(sp)
@@ -41,6 +46,7 @@ _traps:
 	# call trap handler
 	csrr a0, scause
 	csrr a1, sepc
+	mv a2, sp
 	call trap_handler
 
 	# restore registers and sepc from stack
@@ -80,12 +86,21 @@ _traps:
 
 	# return from trap
 	addi sp, sp, 32*8
+
+	# swap stack
+	mv t0, sp
+	csrr sp, sscratch
+	csrw sscratch, t0
+
 	sret
 	
 	.globl __dummy
 __dummy:
-	la t0, dummy
-	csrw sepc, t0
+	# la t0, dummy
+	# csrw sepc, t0
+	mv t0, sp
+	csrr sp, sscratch
+	csrw sscratch, t0
 	sret
 
     .globl __switch_to
@@ -105,6 +120,14 @@ __switch_to:
 	sd s9, 88(a0)
 	sd s10, 96(a0)
 	sd s11, 104(a0)
+	csrr t0, sepc
+	sd t0, 112(a0)
+	csrr t0, sstatus
+	sd t0, 120(a0)
+	csrr t0, sscratch
+	sd t0, 128(a0)
+	csrr t0, satp
+	sd t0, 136(a0)
 
     # restore state from next process
     ld ra, 0(a1)
@@ -121,5 +144,14 @@ __switch_to:
 	ld s9, 88(a1)
 	ld s10, 96(a1)
 	ld s11, 104(a1)
+	ld t0, 112(a1)
+	csrw sepc, t0
+	ld t0, 120(a1)
+	csrw sstatus, t0
+	ld t0, 128(a1)
+	csrw sscratch, t0
+	ld t0, 136(a1)
+	csrw satp, t0
+	sfence.vma zero, zero # flush TLB
 
     ret

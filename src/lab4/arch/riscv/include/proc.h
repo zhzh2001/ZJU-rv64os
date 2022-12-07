@@ -2,11 +2,7 @@
 #define _PROC_H
 #include "types.h"
 
-#ifdef DEBUG
-#define NR_TASKS (1 + 4)
-#else
-#define NR_TASKS (1 + 31) // 用于控制 最大线程数量 （idle 线程 + 31 内核线程）
-#endif
+#define NR_TASKS (1 + 4) // 用于控制 最大线程数量 （idle 线程 + 4 内核线程）
 
 #define TASK_RUNNING 0 // 为了简化实验，所有的线程都只有一种状态
 
@@ -22,12 +18,18 @@ struct thread_info
 	uint64 user_sp;
 };
 
+typedef unsigned long *pagetable_t;
+
 /* 线程状态段数据结构 */
 struct thread_struct
 {
 	uint64 ra;
 	uint64 sp;
 	uint64 s[12];
+
+	uint64 sepc, sstatus, sscratch;
+
+	pagetable_t pgd;
 };
 
 /* 线程数据结构 */

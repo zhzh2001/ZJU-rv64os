@@ -41,4 +41,17 @@
 #define MKPTE(pa, vrwx) ((((pa) >> 2) & 0x003ffffffffffc00) | (vrwx))
 #define PTE2PA(pte) (((pte)&0x003ffffffffffc00) << 2)
 
+#define PTE_V (1 << 0)
+#define PTE_R (1 << 1)
+#define PTE_W (1 << 2)
+#define PTE_X (1 << 3)
+#define PTE_U (1 << 4)
+
+#define USER_START (0x0000000000000000) // user space start virtual address
+#define USER_END (0x0000004000000000)   // user space end virtual address
+
+#define STATUS_SUM (1 << 18)
+#define STATUS_SPP (1 << 8)
+#define STATUS_SPIE (1 << 5)
+
 #endif

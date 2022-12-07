@@ -2,8 +2,9 @@
 #include "printk.h"
 #include "clock.h"
 #include "proc.h"
+#include "syscall.h"
 
-void trap_handler(uint64 scause, uint64 sepc)
+void trap_handler(uint64 scause, uint64 sepc, struct pt_regs *regs)
 {
 	if (scause & TRAP_MASK)
 	{
@@ -16,12 +17,19 @@ void trap_handler(uint64 scause, uint64 sepc)
 		}
 		else
 		{
-			printk("Interrupt %ld, sepc: 0x%lx\n", scause & ~TRAP_MASK, sepc);
+			printk("[S-MODE] Interrupt %ld, sepc: 0x%lx\n", scause & ~TRAP_MASK, sepc);
 		}
 	}
 	else
 	{
-		// is exception
-		printk("Exception: %ld, sepc: 0x%lx\n", scause, sepc);
+		if (scause == ECALL_FROM_USER)
+		{
+			syscall_handler(regs);
+			regs->sepc += 4; // skip ecall instruction
+		}
+		else
+		{
+			printk("[S-MODE] Exception: %ld, sepc: 0x%lx\n", scause, sepc);
+		}
 	}
 }

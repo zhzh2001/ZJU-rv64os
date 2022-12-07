@@ -37,7 +37,7 @@ _start:
     ecall
 
     # enable global interrupt
-    csrsi sstatus, 0x2
+    # csrsi sstatus, 0x2
 
     j start_kernel
 

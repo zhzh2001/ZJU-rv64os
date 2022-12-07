@@ -1,14 +1,17 @@
 #include "printk.h"
 #include "sbi.h"
+#include "proc.h"
+#include "defs.h"
 
 extern void test();
 
 int start_kernel()
 {
-    printk("%d Hello RISC-V\n", 2022);
+    printk("[S-MODE] %d Hello RISC-V\n", 2022);
 
-    // puts("Shutting down...\n");
-    // sbi_shutdown();
+    schedule();
+
+    csr_write(sstatus, 0x2);
 
     test(); // DO NOT DELETE !!!
 
