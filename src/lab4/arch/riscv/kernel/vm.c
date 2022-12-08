@@ -46,7 +46,7 @@ void setup_vm_final(void)
 				   PHY_SIZE - ((uint64)_sdata - VM_START), PTE_W | PTE_R | PTE_V);
 
 	// set satp with swapper_pg_dir
-	csr_write(satp, (((uint64)swapper_pg_dir - PA2VA_OFFSET) >> 12) | 0x8000000000000000);
+	csr_write(satp, MKSATP(swapper_pg_dir));
 
 	// flush TLB
 	asm volatile("sfence.vma zero, zero");

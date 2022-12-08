@@ -53,18 +53,23 @@ void task_init()
 		// create U-mode page table
 		pagetable_t uapp_pgd = (pagetable_t)kalloc();
 		memcpy(uapp_pgd, swapper_pg_dir, PGSIZE);
+#ifdef STATIC_PAGING
 		uint64 uapp_pa = (uint64)alloc_pages(uapp_pgs);
 		memcpy((void *)uapp_pa, uapp_start, uapp_end - uapp_start);
 		memset((void *)(uapp_pa + uapp_end - uapp_start), 0, uapp_pgs * PGSIZE - (uapp_end - uapp_start));
 		create_mapping(uapp_pgd, USER_START, uapp_pa - PA2VA_OFFSET, uapp_pgs, PTE_U | PTE_X | PTE_W | PTE_R | PTE_V);
 		uint64 uapp_stack = (uint64)alloc_pages(1);
 		create_mapping(uapp_pgd, USER_END - PGSIZE, uapp_stack - PA2VA_OFFSET, 1, PTE_U | PTE_W | PTE_R | PTE_V);
+#else
+		do_mmap(task[i], USER_START, uapp_pgs * PGSIZE, VM_X_MASK | VM_W_MASK | VM_R_MASK);
+		do_mmap(task[i], USER_END - PGSIZE, PGSIZE, VM_W_MASK | VM_R_MASK | VM_ANONYM);
+#endif
 
 		// set U-mode trapframe
 		task[i]->thread.sepc = USER_START;
 		task[i]->thread.sstatus = (sstatus & ~STATUS_SPP) | STATUS_SPIE | STATUS_SUM;
 		task[i]->thread.sscratch = USER_END; // user stack pointer
-		task[i]->thread.pgd = (pagetable_t)((((uint64)uapp_pgd - PA2VA_OFFSET) >> 12) | 0x8000000000000000);
+		task[i]->thread.pgd = (pagetable_t)MKSATP(uapp_pgd);
 	}
 
 	printk("...proc_init done!\n");
@@ -172,4 +177,23 @@ void schedule()
 	panic("No scheduling algorithm selected!");
 #endif
 #endif
+}
+
+void do_mmap(struct task_struct *task, uint64_t addr, uint64_t length, uint64_t flags)
+{
+	struct vm_area_struct *vma = &task->vmas[task->vma_cnt];
+	vma->vm_start = addr;
+	vma->vm_end = addr + length;
+	vma->vm_flags = flags;
+	task->vma_cnt++;
+}
+
+struct vm_area_struct *find_vma(struct task_struct *task, uint64_t addr)
+{
+	for (int i = 0; i < task->vma_cnt; i++)
+	{
+		if (task->vmas[i].vm_start <= addr && task->vmas[i].vm_end > addr)
+			return &task->vmas[i];
+	}
+	return NULL;
 }

@@ -40,6 +40,8 @@
 #define PGOFF(va) ((va)&0xfff)
 #define MKPTE(pa, vrwx) ((((pa) >> 2) & 0x003ffffffffffc00) | (vrwx))
 #define PTE2PA(pte) (((pte)&0x003ffffffffffc00) << 2)
+#define MKSATP(pgd) ((((uint64)(pgd)-PA2VA_OFFSET) >> 12) | 0x8000000000000000)
+#define SATP2VA(satp) ((uint64 *)((((uint64)(satp)&0xfffffffffff) << 12) + PA2VA_OFFSET))
 
 #define PTE_V (1 << 0)
 #define PTE_R (1 << 1)
