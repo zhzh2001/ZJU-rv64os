@@ -74,12 +74,12 @@ void create_mapping(uint64 *pgtbl, uint64 va, uint64 pa, uint64 sz, int perm)
 		for (int j = 0; j < 2; j++)
 		{
 			uint64 *newtbl;
-			if (!(tbl[vpn[j]] & 0x1))
+			if (!(tbl[vpn[j]] & PTE_V))
 			{
 				newtbl = (uint64 *)kalloc();
 				memset(newtbl, 0x0, PGSIZE);
 				uint64 pa = (uint64)newtbl - PA2VA_OFFSET;
-				tbl[vpn[j]] = MKPTE(pa, 0x1);
+				tbl[vpn[j]] = MKPTE(pa, PTE_V);
 			}
 			else
 			{

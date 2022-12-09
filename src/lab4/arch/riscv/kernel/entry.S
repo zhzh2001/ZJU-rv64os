@@ -49,9 +49,12 @@ _traps:
 	mv a2, sp
 	call trap_handler
 
+	.globl __ret_from_fork
+__ret_from_fork:
+
 	# restore registers and sepc from stack
 	ld x1, 0(sp)
-	ld x2, 8(sp)
+	# ld x2, 8(sp)
 	ld x3, 16(sp)
 	ld x4, 24(sp)
 	ld x5, 32(sp)

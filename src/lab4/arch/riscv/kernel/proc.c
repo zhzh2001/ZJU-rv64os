@@ -40,7 +40,7 @@ void task_init()
 
 	uint64 sstatus = csr_read(sstatus);
 
-	for (int i = 1; i < NR_TASKS; i++)
+	for (int i = 1; i < INIT_TASK; i++)
 	{
 		task[i] = (struct task_struct *)kalloc();
 		task[i]->state = TASK_RUNNING;
@@ -71,6 +71,9 @@ void task_init()
 		task[i]->thread.sscratch = USER_END; // user stack pointer
 		task[i]->thread.pgd = (pagetable_t)MKSATP(uapp_pgd);
 	}
+
+	for (int i = INIT_TASK; i < NR_TASKS; i++)
+		task[i] = NULL;
 
 	printk("...proc_init done!\n");
 }
@@ -130,6 +133,8 @@ void schedule()
 	uint64 next = 0, c = COUNTER_MAX + 1;
 	for (int i = 1; i < NR_TASKS; i++)
 	{
+		if (!task[i])
+			continue;
 		if (task[i]->state == TASK_RUNNING && task[i]->counter > 0 && task[i]->counter < c)
 		{
 			c = task[i]->counter;
@@ -144,6 +149,8 @@ void schedule()
 		printk("\n");
 		for (int i = 1; i < NR_TASKS; i++)
 		{
+			if (!task[i])
+				continue;
 			task[i]->counter = rand();
 			printk("[S-MODE] SET [PID = %ld COUNTER = %ld]\n", task[i]->pid, task[i]->counter);
 		}
@@ -154,6 +161,8 @@ void schedule()
 	uint64 next = 0, c = 0;
 	for (int i = 1; i < NR_TASKS; i++)
 	{
+		if (!task[i])
+			continue;
 		if (task[i]->state == TASK_RUNNING && task[i]->counter > c)
 		{
 			c = task[i]->counter;
@@ -168,6 +177,8 @@ void schedule()
 		printk("\n");
 		for (int i = 1; i < NR_TASKS; i++)
 		{
+			if (!task[i])
+				continue;
 			task[i]->counter = task[i]->priority;
 			printk("[S-MODE] SET [PID = %ld PRIORITY = %ld COUNTER = %ld]\n", task[i]->pid, task[i]->priority, task[i]->counter);
 		}
@@ -196,4 +207,18 @@ struct vm_area_struct *find_vma(struct task_struct *task, uint64_t addr)
 			return &task->vmas[i];
 	}
 	return NULL;
+}
+
+struct task_struct *clone_current_task_struct()
+{
+	struct task_struct *new_task = (struct task_struct *)alloc_page();
+	memcpy(new_task, current, PGSIZE);
+	for (int i = 1; i < NR_TASKS; i++)
+		if (!task[i])
+		{
+			task[i] = new_task;
+			task[i]->pid = i;
+			break;
+		}
+	return new_task;
 }

@@ -2,7 +2,8 @@
 #define _PROC_H
 #include "types.h"
 
-#define NR_TASKS (1 + 1) // 用于控制 最大线程数量 （idle 线程 + 1 内核线程）
+#define NR_TASKS (1 + 16) // 用于控制 最大线程数量 （idle 线程 + 1 内核线程）
+#define INIT_TASK (1 + 1) // 用于控制 内核线程的起始编号
 
 #define TASK_RUNNING 0 // 为了简化实验，所有的线程都只有一种状态
 
@@ -81,5 +82,7 @@ void dummy();
 void do_mmap(struct task_struct *task, uint64 addr, uint64 length, uint64 flags);
 
 struct vm_area_struct *find_vma(struct task_struct *task, uint64 addr);
+
+struct task_struct *clone_current_task_struct();
 
 #endif
